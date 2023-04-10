@@ -16,15 +16,73 @@ char GetRandomChar()
 void GetText(char textArray[])
 {
 	printf_s("Enter your massege: ");
-	//while (getchar() != '\n');
+	while (getchar() != '\n');
 	gets_s(textArray, 300);
+}
+
+bool CheckBuffer(char buffer[], int wordLen)
+{
+	if (wordLen < 3 || wordLen % 2 == 0 )
+		return 0;
+	for (int i = 0; i < wordLen / 2; i++)
+	{
+		if (buffer[i] != buffer[wordLen - i - 1])
+			return 0;
+	}
+	return 1;
 }
 
 
 //”далить из текста все слова, которые €вл€ютс€ палиндромами.
 void DeletePalindrom(char textArray[], char newArray[])
 {
+	if (textArray[0] == 0)
+	{
+		newArray[0] = 0;
+		return;
+	}
 
+	char* buffer;
+
+	buffer = (char*)malloc(sizeof(char) * ARRAY_SIZE);
+
+	for (int i = 0, n = 0, z = 0, wordLen = 0; ; i++)
+	{
+
+		if (textArray[i] != 32)
+		{
+			buffer[z++] = textArray[i];
+			wordLen++;
+		}
+
+		if (textArray[i+1] == 32 || textArray[i + 1] == 0)
+		{
+			if (!CheckBuffer(buffer, wordLen))
+			{
+				z = 0;
+				while (z < wordLen)
+				{
+					newArray[n++] = buffer[z++];
+				}
+				z = 0;
+			}
+
+			newArray[n++] = 32;
+			wordLen = 0;
+			z = 0;
+		}
+			
+
+		if (textArray[i] == 0)
+		{
+			newArray[n-1] = 0;
+			break;
+		}
+	}
+
+	
+
+	free(buffer);
 }
 
 
@@ -85,7 +143,7 @@ int main()
 	{
 		printf_s("Enter ex number: ");
 		scanf_s("%d", &type);
-		if (type < 1 || type > 3)
+		if (type >= 1 && type <= 3)
 			break;
 		printf_s("Invalid value. Try again.\n");
 	} while (true);
@@ -96,6 +154,7 @@ int main()
 	{
 	case 1:
 		DeletePalindrom(textArray, newArray);
+		printf_s("%s", newArray);
 		break;
 	case 2:
 		ChechXW(textArray);
