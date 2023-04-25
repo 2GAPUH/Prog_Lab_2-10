@@ -10,7 +10,8 @@
 
 char GetRandomChar()
 {
-	return rand() % (126 - 31 + 1) + 31;
+	char alphabet[] = "abcdzABCDZ019 -.,?!";
+	return rand() % (126 - 33 + 1) + 33;
 }
 
 void GetText(char textArray[])
@@ -22,8 +23,6 @@ void GetText(char textArray[])
 
 bool CheckBuffer(char buffer[], int wordLen)
 {
-	if (wordLen < 3 || wordLen % 2 == 0 )
-		return 0;
 	for (int i = 0; i < wordLen / 2; i++)
 	{
 		if (buffer[i] != buffer[wordLen - i - 1])
@@ -49,7 +48,7 @@ void DeletePalindrom(char textArray[], char newArray[])
 	for (int i = 0, n = 0, z = 0, wordLen = 0; ; i++)
 	{
 
-		if (textArray[i] != 32)
+		if (textArray[i] != ' ')
 		{
 			buffer[z++] = textArray[i];
 			wordLen++;
@@ -91,21 +90,27 @@ void DeletePalindrom(char textArray[], char newArray[])
 сообщение об этом.*/
 void ChechXW(char textArray[])
 {
+	bool checkX = 0, checkW = 0;
 	for (int i = 0; textArray[i] != 0; i++)
 	{
-		if (textArray[i] == 'w')
+		if (textArray[i] == 'w' && checkW == 0)
 		{
-			printf_s("'w' is Detected!\n");
-			return;
+			printf_s("'w' %d in text!\n", i+1);
+			checkW = 1;
 		}
-		else if(textArray[i] == 'x')
+		else if(textArray[i] == 'x' && checkX == 0)
 		{
-			printf_s("'x' is Detected!\n");
-			return;
+			printf_s("'x' %d int text!\n", i+1);
+			checkX = 1;
 		}
 	}
 
-	printf_s("No w or x found.\n");
+
+	if (!checkW)
+		printf_s("No w in text.\n");
+
+	if (!checkX)
+		printf_s("No x in text.\n");
 }
 
 /*Дана строка. Вставить после каждого символа два случайных
